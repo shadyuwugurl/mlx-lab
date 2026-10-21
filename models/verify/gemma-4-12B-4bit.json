@@ -1,0 +1,14 @@
+{
+  "path": "/Users/charlie/MLXLoRAStudio/models/gemma-4-12B-4bit",
+  "load_seconds": 2.81,
+  "model_type": "gemma4_unified",
+  "quantization": null,
+  "hidden_size": null,
+  "num_hidden_layers": null,
+  "vocab_size": 262144,
+  "template": "raw (ValueError)",
+  "generate_seconds": 5.41,
+  "prompt": "Explain what a mixture-of-experts model is in one sentence.",
+  "completion": "\n\nWhat is the main difference between a<image|><image|><image|><image|><image|><image|><image|><image|><image|><image|><image|><image|><image|><image|><image|><image|><image|>\n<image|><image|><image|><image|><image|><image|><image|><image|><image|>\n<image|><image|><image|><image|>\n<image|><image|><image|>\n<image|><image|><image|>",
+  "on_disk_bytes": 11020122837
+}

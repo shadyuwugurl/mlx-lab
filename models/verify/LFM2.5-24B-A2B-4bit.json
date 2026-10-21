@@ -1,0 +1,14 @@
+{
+  "path": "/Users/charlie/MLXLoRAStudio/models/LFM2.5-24B-A2B-4bit",
+  "load_seconds": 4.66,
+  "model_type": "lfm2_moe",
+  "quantization": null,
+  "hidden_size": 2048,
+  "num_hidden_layers": 40,
+  "vocab_size": 128000,
+  "template": "chat",
+  "generate_seconds": 2.6,
+  "prompt": "The capital of France is",
+  "completion": "The user says: \"The capital of France is\". This is a statement, presumably incomplete. The user might be expecting the assistant to complete the sentence: \"The capital of France is Paris.\" So the answer: \"Paris\". Possibly",
+  "on_disk_bytes": 16690854530
+}

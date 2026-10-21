@@ -1,8 +1,15 @@
 .venv/
+.venv-unsloth/
 __pycache__/
 *.pyc
 .pytest_cache/
 upstreams/
-models/
 runs/
 *.egg-info/
+unsloth_compiled_cache/
+
+# Large artifacts stay out of git; the small verification records do not.
+models/*
+!models/verify/
+models/verify/*
+!models/verify/*.json

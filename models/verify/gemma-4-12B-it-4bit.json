@@ -1,0 +1,14 @@
+{
+  "path": "/Users/charlie/MLXLoRAStudio/models/gemma-4-12B-it-4bit",
+  "load_seconds": 1.99,
+  "model_type": "gemma4_unified",
+  "quantization": null,
+  "hidden_size": null,
+  "num_hidden_layers": null,
+  "vocab_size": 262144,
+  "template": "chat",
+  "generate_seconds": 3.16,
+  "prompt": "List three uses of a 24B MoE language model on a laptop.",
+  "completion": "<|channel>thought\n\n*   Model: 24B MoE (Mixture of Experts) language model.\n    *   Hardware: Laptop.\n    *   Task: List three uses.\n\n    *   *Size:* ",
+  "on_disk_bytes": 6773372848
+}
