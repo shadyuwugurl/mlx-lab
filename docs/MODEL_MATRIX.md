@@ -68,11 +68,36 @@ in the Studio layer (arch whitelist, chat templates, dataset handling) — that 
 
 ## Verified status
 
-| model | downloaded | loads in `mlx_lm` | generates | Studio trains |
-|---|---|---|---|---|
-| M1 LFM2.5-24B-A2B-4bit | pending | pending | pending | pending |
-| M2 Qwen3.5-9B-DefiantFable | pending (convert after download) | pending | pending | pending |
-| M3 gemma-4-12B-4bit | pending | pending | pending | pending |
+All measurements below were produced on the local M5 (32 GB) by
+`scripts/verify_model.py` (raw JSON in `models/verify/*.json`) and by the Studio
+backend via `scripts/run_studio.py` (logs in `~/mlx-lab-runs/<run>/run.log`).
 
-This table is updated in place as each cell is verified; the "verified" rows are the evidence trail for
-the goal's completion criteria.
+| model | arch (`model_type`) | quant | on disk | load | generate | chat template |
+|---|---|---|---|---|---|---|
+| M1 `LFM2.5-24B-A2B-4bit` | `lfm2_moe` (40 layers, hidden 2048, vocab 128000) | 4-bit mixed (g64) | 16.69 GB | 4.66 s | 2.60 s | chat |
+| M2 `Qwen3.5-9B-DefiantFable-4bit` | `qwen3_5` (multimodal) | 4-bit g64 | 5.06 GB | 1.34 s | 2.72 s | chat |
+| M3 `gemma-4-12B-4bit` | `gemma4_unified` (48 layers, hidden 3840, vocab 262144) | 4-bit g64 | 11.02 GB | 2.81 s | 5.41 s | **none** (base model) |
+| M3b `gemma-4-12B-it-4bit` | `gemma4_unified` | 4-bit g64 | 6.77 GB | 1.99 s | 3.16 s | chat |
+
+M2 was converted from the exact named source repo
+`DavidAU/Qwen3.5-9B-The-Defiant-Fable-Uncensored-Heretic-NEO-IMATRIX-MAX-MTP`
+(19.36 GB bf16) with `mlx_lm.convert -q --q-bits 4 --q-group-size 64 --dtype bfloat16`
+→ 4.501 bits/weight. The source snapshot is kept as
+`Qwen3.5-9B-DefiantFable-bf16`.
+
+### Studio SFT evidence (the locally installed app bundle)
+
+| run | model | train loss | test loss / ppl | adapter |
+|---|---|---|---|---|
+| `lfm25-sft` | M1 | 5.719 → 3.159 → 2.883 → 2.577 | 3.739 / 42.070 (625 tok) | `adapters.safetensors` 179,925,117 B |
+| `qwen35-defiant-sft` | M2 | 2.852 → 1.838 → 2.535 → 1.758 | 2.362 / 10.614 (615 tok) | `adapters.safetensors` 10,827,310 B |
+| `gemma4-base` | M3 (base, fallback template from PR #107) | 3.485 → 2.301 | 3.053 / 21.175 (102 tok) | `adapters.safetensors` 10,942,915 B |
+| `gemma4-it-sft` | M3b | 7.740 → 6.623 → 7.050 → 5.680 | 5.967 / 390.416 (628 tok) | `adapters.safetensors` 10,942,915 B |
+| `smoke-5826` | `Qwen/Qwen3-0.6B` | 4.604 → 3.192 → 3.708 → 2.828 | 3.303 / 27.195 (25,843 tok) | `adapters.safetensors` 316,825,700 B |
+
+All three named target models train on the local M5. M3 (the *base* gemma-4-12B)
+only trains because of the fallback chat template proposed in
+`Goekdeniz-Guelmez/mlx-lm-lora#107`; without it the tokenizer raises
+`ValueError: Cannot use chat template functions because tokenizer.chat_template is not set`.
+
+Peak memory: 17.68 GB for M1, 5.91 GB for M2, 7.59 GB for M3b.
